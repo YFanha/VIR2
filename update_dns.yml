@@ -1,0 +1,21 @@
+---
+- name: Update HOSTS file
+  hosts: proxmox_all_lxc
+  gather_facts: false
+  remote_user: ansible
+  become: true
+  vars:
+      host_file: "/etc/hosts"
+  tasks:
+    - name: Get lxc IP by its vmid
+      shell: lxc-info -n "{{ proxmox_vmid }}" -iH
+      register: ip
+      delegate_to: 192.168.15.100
+
+    - name:  update the hosts file
+      lineinfile:
+        dest: "{{ host_file }}"
+        line:  "{{ ip.stdout }}  {{ proxmox_hostname }}"
+        create: yes
+        regexp: "{{ proxmox_hostname }}"
+      delegate_to: localhost

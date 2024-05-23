@@ -1,0 +1,21 @@
+---
+- name: Execute Command and Save Result
+  hosts: template
+  remote_user: ansible
+  become: true
+  gather_facts: false
+  vars:
+    get_ip: "lxc-info -n 100 | grep IP | gawk '/IP:/ {print $2}'"
+    file: "/app/ansible/return/ip_list"
+  tasks:
+    - name: Execute Command
+      shell: lxc-info -n "{{ proxmox_vmid }}" | grep IP | gawk '/IP:/ {print $2}'
+      register: command_output
+      delegate_to: 192.168.15.100
+
+    - name: Display Command Output
+      lineinfile:
+        path: "{{ file }}"
+        line: "{{ command_output.stdout }}"
+        state: present
+      delegate_to: localhost
