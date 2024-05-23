@@ -1,0 +1,10 @@
+---
+packages:
+  - sudo
+  - nano
+  - ssh 
+  - nmap
+  - netdiscover 
+  - sqlmap 
+  - crunch 
+  - lynx

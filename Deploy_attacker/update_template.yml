@@ -1,0 +1,23 @@
+---
+- name: Update inventory of LXC
+  hosts: kali-template
+  gather_facts: false
+  remote_user: ansible
+  become: true
+  pre_tasks:
+    include_vars:
+      file: vars.yml
+  tasks:
+    - name : Install new softwares
+      apt:
+        name: "{{ item }}"
+        update_cache: true
+        cache_valid_time: 3600
+        state: present
+      loop: "{{ packages }}"
+
+    - name: Enable ssh root login
+      ansible.builtin.lineinfile:
+        dest: /etc/ssh/sshd_config
+        regexp: '^PermitRootLogin'
+        line: "PermitRootLogin yes"
