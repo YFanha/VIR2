@@ -1,5 +1,5 @@
 ---
-- name: Update inventory of LXC
+- name: Update kali-template
   hosts: kali-template
   gather_facts: false
   remote_user: ansible
@@ -8,7 +8,7 @@
     include_vars:
       file: vars.yml
   tasks:
-    - name : Install new softwares
+    - name: Install new softwares
       apt:
         name: "{{ item }}"
         update_cache: true
