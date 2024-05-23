@@ -1,0 +1,56 @@
+---
+- name: Update kali-template
+  hosts: kali-template
+  gather_facts: false
+  become: true
+  pre_tasks:
+    - include_vars:
+        file: vars.yml
+    - name: Start container
+      community.general.proxmox:
+        vmid: "{{ template_id }}"
+        api_user: ansible_user@pve
+        api_password: Pa$$w0rd
+        api_host: pve
+        state: started
+  tasks:
+    - name: Install new softwares
+      apt:
+        name: "{{ item }}"
+        update_cache: true
+        cache_valid_time: 3600
+        state: present
+      loop: "{{ packages }}"
+
+    - name: Enable ssh root login
+      ansible.builtin.lineinfile:
+        dest: /etc/ssh/sshd_config
+        regexp: '^PermitRootLogin'
+        line: "PermitRootLogin yes"
+
+
+- name: Deploy attacker
+  hosts: pve
+  gather_facts: false
+  become: true
+  pre_tasks:
+    - include_vars:
+        file: vars.yml
+    - name: Stop container
+      community.general.proxmox:
+        vmid: "{{ template_id }}"
+        api_user: "{{ pve_user }}"
+        api_password: "{{ pve_pass }}"
+        api_host: "{{ pve_host }}"
+        state: stopped
+  tasks:
+    - name: Create a full clone of the container
+      community.general.proxmox:
+        vmid: "30{{ student }}"
+        api_user: ansible_user@pve
+        api_password: Pa$$w0rd
+        api_host: pve
+        clone: "{{ template_id }}"
+        hostname: "student_{{ student }}"
+    - name : Reset IP
+      command: pct exec 30{{ student }} -- bash -c "dhclient -r && dhclient"

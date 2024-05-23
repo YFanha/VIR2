@@ -6,6 +6,7 @@
   become: true
   vars:
       host_file: "/etc/hosts"
+      inventory_file: "/app/ansible/inventory/inventory_lxc"
   tasks:
     - name: Get lxc IP by its vmid
       shell: lxc-info -n "{{ proxmox_vmid }}" -iH
@@ -16,6 +17,15 @@
       lineinfile:
         dest: "{{ host_file }}"
         line:  "{{ ip.stdout }}  {{ proxmox_hostname }}"
+        create: yes
+        regexp: "{{ proxmox_hostname }}"
+      delegate_to: localhost
+
+
+    - name:  update inventory file
+      lineinfile:
+        dest: "{{ inventory_file }}"
+        line:  "{{ proxmox_hostname }} ansible_host={{ ip.stdout }}  ansible_port=22"
         create: yes
         regexp: "{{ proxmox_hostname }}"
       delegate_to: localhost

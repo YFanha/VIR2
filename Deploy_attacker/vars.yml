@@ -1,4 +1,7 @@
 ---
+pve_host: pve
+pve_user: ansible_user@pve
+pve_pass: Pa$$w0rd
 packages:
   - sudo
   - nano
@@ -8,3 +11,6 @@ packages:
   - sqlmap 
   - crunch 
   - lynx
+  - tree
+template_id: 800
+student: 7
