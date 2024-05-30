@@ -17,5 +17,17 @@ kali_template_id: 800
 kali_student_vmid: 307
 config_file_location: "/app/ansible/Pentest-infra"
 
+packages_pentest: 
+  - git
+  - apache2
+  - libapache2-mod-php
+  - php7.4
+  - mariadb-server
+  - php-mysqli
+
 pentest_template_id: 801
 pentest_student_vmid: 207
+
+photoblog_repo: "https://github.com/7ric/Photoblog.git"
+photoblog_path: "/var/www/photoblog"
+ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE3lcIzOIgOzgeLLWNMseDGQ1Ly7aLK8Bbpv3iB+z7oc"
