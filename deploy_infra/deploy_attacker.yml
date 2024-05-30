@@ -1,0 +1,54 @@
+- name: Deploy attacker
+  hosts: pve
+  gather_facts: false
+  become: true
+  vars:
+    - lxc_hostname: "student-{{ student }}-kali"
+  pre_tasks:
+    - include_vars:
+        file: vars.yml
+    - name: Stop container
+      community.general.proxmox:
+        vmid: "{{ template_id }}"
+        api_user: "{{ pve_user }}"
+        api_password: "{{ pve_pass }}"
+        api_host: "{{ pve_host }}"
+        state: stopped
+  tasks:
+    - name: Create a full clone of the container
+      community.general.proxmox:
+        vmid: "{{ student_vmid }}"
+        api_user: "{{ pve_user }}"
+        api_password: "{{ pve_pass }}"
+        api_host: "{{ pve_host }}"
+        node: vir2-pve-01
+        clone: "{{ template_id }}"
+        clone_type: full
+        storage: datastore-1
+        hostname: "{{ lxc_hostname }}"
+        state: present
+        tags:
+          - attacker
+    - name: Start the container
+      community.general.proxmox:
+        vmid: "{{ student_vmid }}"
+        api_user: "{{ pve_user }}"
+        api_password: "{{ pve_pass }}"
+        api_host: "{{ pve_host }}"
+        state: started
+
+    - name : Reset IP
+      command: pct exec "{{ student_vmid }}" -- bash -c "dhclient -r && dhclient"
+
+    - name: Get lxc IP by its vmid
+      shell: lxc-info -n "{{ student_vmid }}" -iH
+      register: ipconf
+
+    - command: mkdir -p "{{ config_file_location }}"
+      delegate_to: localhost
+
+    - name: Writing config file
+      ansible.builtin.template:
+        src: templates/ipconfig.j2
+        dest: "{{ config_file_location }}/{{ lxc_hostname }}"
+      delegate_to: localhost

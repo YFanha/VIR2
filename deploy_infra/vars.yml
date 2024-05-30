@@ -1,0 +1,21 @@
+---
+pve_host: 192.168.15.100
+pve_user: ansible_user@pve
+pve_pass: Pa$$w0rd
+packages_kali:
+  - sudo
+  - nano
+  - ssh 
+  - nmap
+  - netdiscover 
+  - sqlmap 
+  - crunch 
+  - lynx
+  - tree
+student: 7
+kali_template_id: 800
+kali_student_vmid: 307
+config_file_location: "/app/ansible/Pentest-infra"
+
+pentest_template_id: 801
+pentest_student_vmid: 207

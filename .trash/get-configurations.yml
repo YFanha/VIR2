@@ -1,0 +1,21 @@
+name: Starting container
+  hosts: pve
+  pre_tasks:
+    - include_vars:
+        file: vars.yml
+  tasks:  
+  - name : Reset IP
+    command: pct exec "{{ student_vmid }}" -- bash -c "dhclient -r && dhclient"
+
+  - name: Get lxc IP by its vmid
+    shell: lxc-info -n "{{ student_vmid }}" -iH
+    register: ipconf
+
+  - command: mkdir -p "{{ config_file_location }}"
+    delegate_to: localhost
+
+  - name: Writing config file
+    ansible.builtin.template:
+      src: templates/ipconfig.j2
+      dest: "/app/ansible/{{ lxc_hostname }}"
+    delegate_to: localhost

@@ -6,7 +6,7 @@
   become: true
   vars:
       host_file: "/etc/hosts"
-      inventory_file: "/app/ansible/inventory/inventory_lxc"
+      inventory_file: "/app/ansible/inventory/inventory"
   tasks:
     - name: Get lxc IP by its vmid
       shell: lxc-info -n "{{ proxmox_vmid }}" -iH

@@ -1,0 +1,1 @@
+/bin/ansible-playbook -i /app/ansible/inventory/proxmox.yml /app/ansible/update_dns.yml

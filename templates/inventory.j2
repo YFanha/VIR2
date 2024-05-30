@@ -1,3 +1,0 @@
-{% for h in groups['proxmox_all_lxc'] %}
-{{ proxmox_hostname }} ansible_host={{ ip.stdout }} ansible_port={{ ansible_port }} - {{ h }}
-{% endfor %}
