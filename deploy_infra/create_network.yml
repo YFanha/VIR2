@@ -1,16 +1,36 @@
-- name: Create the prive network
-  hosts: localhost
+- name: Create the private network
+  hosts: pve
   gather_facts: false
   become: true
   vars:
     - lxc_hostname: "student-{{ student }}-kali"
     - vmbr: "vmbr{{ student }}"
+    - interface_file: /etc/network/interfaces
   pre_tasks:
     - include_vars:
         file: vars.yml
   tasks:
-    - name: Ensure vmbr1 bridge configuration exists in /etc/network/interfaces
-      ansible.builtin.lineinfile:
-      path: /home/ansible/test.int
-      line: "auto vmbr1\niface vmbr1 inet manual\n\tbridge_ports none\n\tbridge_stp off\n\tbridge_fd 0"
-      state: present
+    - name: Check if the network exist
+      ansible.builtin.shell:
+        cmd: grep -q "^auto {{ vmbr }}" "{{ interface_file }}"
+      register: block_exists
+      changed_when: false
+      ignore_errors: true
+
+    - name: Create the network if it doesn't exist
+      ansible.builtin.blockinfile:
+        path: "{{ interface_file }}"
+        block: |
+          auto {{ vmbr }}
+          iface {{ vmbr }} inet manual
+              bridge_ports none
+              bridge_stp off
+              bridge_fd 0
+        insertafter: EOF
+        marker: ""
+        create: yes
+        state: present
+      when: block_exists.rc > 0
+
+    - name: Put the interface up
+      ansible.builtin.command: ifup "{{ vmbr }}"

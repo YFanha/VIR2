@@ -9,6 +9,10 @@
     - include_vars:
         file: vars.yml
 
+    - name: debug 
+      debug:
+        msg: "INTERFACE : {{ vmbr }}"
+
     - name: Stop container
       community.general.proxmox:
         vmid: "{{ kali_template_id }}"
@@ -16,22 +20,7 @@
         api_password: "{{ pve_pass }}"
         api_host: "{{ pve_host }}"
         state: stopped
-  tasks:
-    - name: Ensure the bridge configuration exists in the PVE
-      community.general.network_interfaces:
-        name: "{{ vmbr }}"
-        state: present
-        type: bridge
-        enabled: true
-        bridge_ports: none
-        bridge_stp: off
-        bridge_fd: 0
-
-    - name: Apply network configuration to the PVE
-      ansible.builtin.command: ifup vmbr1
-      when: ansible_facts['ansible_network_interfaces']['"{{vmbr}}"']['state'] == 'down'
-      changed_when: false
-
+  tasks:  
     - name: Create a full clone of the container
       community.general.proxmox:
         vmid: "{{ kali_student_vmid }}"
@@ -52,9 +41,9 @@
         api_user: "{{ pve_user }}"
         api_password: "{{ pve_pass }}"
         api_host: "{{ pve_host }}"
-        vmid: "{{ lxc_vmid }}"
-        net: |
-          net1: name=eth0,bridge={{ vmbr }},ip={{ kali_ip }},type=veth
+        vmid: "{{ kali_student_vmid }}"
+        node: vir2-pve-01
+        net: "name=eth0,bridge={{ vmbr }},ip={{ kali_ip }},type=veth"
     
     - name: Start the container
       community.general.proxmox:
