@@ -20,7 +20,11 @@
         api_password: "{{ pve_pass }}"
         api_host: "{{ pve_host }}"
         state: stopped
+<<<<<<< Updated upstream
   tasks:  
+=======
+  tasks:
+>>>>>>> Stashed changes
     - name: Create a full clone of the container
       community.general.proxmox:
         vmid: "{{ kali_student_vmid }}"
