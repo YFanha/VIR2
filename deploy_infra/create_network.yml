@@ -1,0 +1,25 @@
+- name: Create the prive network
+  hosts: pve
+  gather_facts: false
+  become: true
+  vars:
+    - lxc_hostname: "student-{{ student }}-kali"
+    - vmbr: "vmbr{{ student }}"
+  pre_tasks:
+    - include_vars:
+        file: vars.yml
+  tasks:
+    - name: Ensure the bridge configuration exists in the PVE
+      community.general.network_interfaces:
+        name: "{{ vmbr }}"
+        state: present
+        type: bridge
+        enabled: true
+        bridge_ports: none
+        bridge_stp: off
+        bridge_fd: 0
+
+    - name: Apply network configuration to the PVE
+      ansible.builtin.command: ifup vmbr1
+      when: ansible_facts['ansible_network_interfaces']['"{{vmbr}}"']['state'] == 'down'
+      changed_when: false

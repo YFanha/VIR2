@@ -4,25 +4,42 @@
   become: true
   vars:
     - lxc_hostname: "student-{{ student }}-kali"
+    - vmbr: "vmbr{{ student }}"
   pre_tasks:
     - include_vars:
         file: vars.yml
+
     - name: Stop container
       community.general.proxmox:
-        vmid: "{{ template_id }}"
+        vmid: "{{ kali_template_id }}"
         api_user: "{{ pve_user }}"
         api_password: "{{ pve_pass }}"
         api_host: "{{ pve_host }}"
         state: stopped
   tasks:
+    - name: Ensure the bridge configuration exists in the PVE
+      community.general.network_interfaces:
+        name: "{{ vmbr }}"
+        state: present
+        type: bridge
+        enabled: true
+        bridge_ports: none
+        bridge_stp: off
+        bridge_fd: 0
+
+    - name: Apply network configuration to the PVE
+      ansible.builtin.command: ifup vmbr1
+      when: ansible_facts['ansible_network_interfaces']['"{{vmbr}}"']['state'] == 'down'
+      changed_when: false
+
     - name: Create a full clone of the container
       community.general.proxmox:
-        vmid: "{{ student_vmid }}"
+        vmid: "{{ kali_student_vmid }}"
         api_user: "{{ pve_user }}"
         api_password: "{{ pve_pass }}"
         api_host: "{{ pve_host }}"
         node: vir2-pve-01
-        clone: "{{ template_id }}"
+        clone: "{{ kali_template_id }}"
         clone_type: full
         storage: datastore-1
         hostname: "{{ lxc_hostname }}"
@@ -30,24 +47,28 @@
         tags:
           - attacker
 
-    # Add new interface and configure static IP
-
-
-
+    - name: Configure the LXC container network interface
+      community.general.proxmox_kvm:
+        api_user: "{{ pve_user }}"
+        api_password: "{{ pve_pass }}"
+        api_host: "{{ pve_host }}"
+        vmid: "{{ lxc_vmid }}"
+        net: |
+          net1: name=eth0,bridge={{ vmbr }},ip={{ kali_ip }},type=veth
     
     - name: Start the container
       community.general.proxmox:
-        vmid: "{{ student_vmid }}"
+        vmid: "{{ kali_student_vmid }}"
         api_user: "{{ pve_user }}"
         api_password: "{{ pve_pass }}"
         api_host: "{{ pve_host }}"
         state: started
 
     - name : Reset IP
-      command: pct exec "{{ student_vmid }}" -- bash -c "dhclient -r && dhclient"
+      command: pct exec "{{ kali_student_vmid }}" -- bash -c "dhclient -r && dhclient"
 
     - name: Get lxc IP by its vmid
-      shell: lxc-info -n "{{ student_vmid }}" -iH
+      shell: lxc-info -n "{{ kali_student_vmid }}" -iH
       register: ipconf
 
     - command: mkdir -p "{{ config_file_location }}"
