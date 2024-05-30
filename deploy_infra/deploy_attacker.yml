@@ -29,6 +29,12 @@
         state: present
         tags:
           - attacker
+
+    # Add new interface and configure static IP
+
+
+
+    
     - name: Start the container
       community.general.proxmox:
         vmid: "{{ student_vmid }}"
