@@ -5,7 +5,7 @@
   vars:
     - lxc_hostname: "student-{{ student }}-kali"
     - vmbr: "vmbr{{ student }}"
-    - interface_file: /etc/network/interfaces
+    - interface_file: /etc/network/interfaces # PVE host interfaces configuration file
   pre_tasks:
     - include_vars:
         file: vars.yml
