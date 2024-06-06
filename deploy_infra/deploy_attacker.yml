@@ -8,11 +8,6 @@
   pre_tasks:
     - include_vars:
         file: vars.yml
-
-    - name: debug 
-      debug:
-        msg: "INTERFACE : {{ vmbr }}"
-
     - name: Stop container
       community.general.proxmox:
         vmid: "{{ kali_template_id }}"
@@ -20,7 +15,7 @@
         api_password: "{{ pve_pass }}"
         api_host: "{{ pve_host }}"
         state: stopped
-  tasks:  
+  tasks:
     - name: Create a full clone of the container
       community.general.proxmox:
         vmid: "{{ kali_student_vmid }}"
@@ -42,9 +37,9 @@
         api_password: "{{ pve_pass }}"
         api_host: "{{ pve_host }}"
         vmid: "{{ kali_student_vmid }}"
-        node: vir2-pve-01
-        net: "name=eth0,bridge={{ vmbr }},ip={{ kali_ip }},type=veth"
-    
+        net:
+          net1: bridge={{ vmbr }},ip={{ kali_ip }}
+
     - name: Start the container
       community.general.proxmox:
         vmid: "{{ kali_student_vmid }}"

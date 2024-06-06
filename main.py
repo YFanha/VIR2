@@ -33,6 +33,11 @@ def deploy_infras():
 
 #def stop_all():
 
+
+#def update_kali():
+    #Start playbook
+
+    
 def update_inventory():
     os.system("bash updateInventory")
 
@@ -48,9 +53,9 @@ def main():
         if choice == '1':
             deploy_infras()
         elif choice == '2':
-            print("Vous avez choisi l'Option 2.")
+            #stop_all()
         elif choice == '3':
-            print("Vous avez choisi l'Option 3.")
+            #update_kali()
         elif choice == '4':
             print("Quitter le programme.")
             break
