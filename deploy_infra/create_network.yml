@@ -3,7 +3,6 @@
   gather_facts: false
   become: true
   vars:
-    - lxc_hostname: "student-{{ student }}-kali"
     - vmbr: "vmbr{{ student }}"
     - interface_file: /etc/network/interfaces # PVE host interfaces configuration file
   pre_tasks:

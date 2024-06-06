@@ -3,7 +3,7 @@
   gather_facts: false
   become: true
   vars:
-    - lxc_hostname: "student-{{ student }}-kali"
+    - lxc_hostname: "{{ kali_student_vmid }}-kali"
     - vmbr: "vmbr{{ student }}"
   pre_tasks:
     - include_vars:
