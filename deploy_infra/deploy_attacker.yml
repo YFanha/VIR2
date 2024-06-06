@@ -35,7 +35,7 @@
       command: pct exec "{{ kali_student_vmid }}" -- bash -c "dhclient -r && dhclient"
 
     - name: Get lxc IP by its vmid
-      shell: lxc-info -n "{{ kali_student_vmid }}" -iH
+      shell: lxc-info -n "{{ kali_student_vmid }}" -iH | grep "^192.168"
       register: ipconf
 
     - command: mkdir -p "{{ config_file_location }}"
