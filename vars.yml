@@ -1,0 +1,31 @@
+config_file_location: /app/ansible/Pentest-infra
+kali_ip: 10.10.10.10/24
+kali_student_vmid: 220
+kali_template_id: 800
+packages_kali:
+- sudo
+- nano
+- ssh
+- nmap
+- netdiscover
+- sqlmap
+- crunch
+- lynx
+- tree
+packages_pentest:
+- git
+- apache2
+- libapache2-mod-php
+- php7.4
+- mariadb-server
+- php-mysqli
+pentest_ip: 10.10.10.20/24
+pentest_student_vmid: 220
+pentest_template_id: 801
+photoblog_path: /var/www/photoblog
+photoblog_repo: https://github.com/7ric/Photoblog.git
+pve_host: 192.168.15.100
+pve_pass: Pa$$w0rd
+pve_user: ansible_user@pve
+ssh_key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE3lcIzOIgOzgeLLWNMseDGQ1Ly7aLK8Bbpv3iB+z7oc
+student: 20

@@ -1,6 +1,4 @@
 pve ansible_host=192.168.15.100 ansible_port=22 remote_user=root
 srv-ansible-01 ansible_host=192.168.15.110  ansible_port=22
-kali-template ansible_host=192.168.15.238  ansible_port=22
-192.168.15.242  ansible_port=22
-student-7-kali ansible_host=192.168.15.245  ansible_port=22
+kali-template ansible_host=  ansible_port=22
 pentest-template ansible_host=  ansible_port=22
