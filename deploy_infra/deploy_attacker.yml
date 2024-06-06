@@ -16,29 +16,12 @@
         api_host: "{{ pve_host }}"
         state: stopped
   tasks:
-    - name: Create a full clone of the container
-      community.general.proxmox:
-        vmid: "{{ kali_student_vmid }}"
-        api_user: "{{ pve_user }}"
-        api_password: "{{ pve_pass }}"
-        api_host: "{{ pve_host }}"
-        node: vir2-pve-01
-        clone: "{{ kali_template_id }}"
-        clone_type: full
-        storage: datastore-1
-        hostname: "{{ lxc_hostname }}"
-        state: present
-        tags:
-          - attacker
+    - name: Clone the LXC
+      command: "pct clone {{ kali_template_id }} {{ kali_student_vmid }} --full --storage datastore-1 --hostname {{ lxc_hostname }}"
 
-    - name: Configure the LXC container network interface
-      community.general.proxmox_kvm:
-        api_user: "{{ pve_user }}"
-        api_password: "{{ pve_pass }}"
-        api_host: "{{ pve_host }}"
-        vmid: "{{ kali_student_vmid }}"
-        net:
-          net1: bridge={{ vmbr }},ip={{ kali_ip }}
+
+    - name: Configure the interfaces
+      command: "pct set {{ kali_student_vmid }} -net0 name=eth0,bridge=vmbr0,ip=dhcp -net1 name=eth1,bridge={{ vmbr }},ip={{ kali_ip }}"
 
     - name: Start the container
       community.general.proxmox:
