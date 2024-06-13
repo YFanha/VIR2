@@ -19,7 +19,6 @@
     - name: Clone the LXC
       command: "pct clone {{ kali_template_id }} {{ kali_student_vmid }} --full --storage datastore-1 --hostname {{ lxc_hostname }}"
 
-
     - name: Configure the interfaces
       command: "pct set {{ kali_student_vmid }} -net0 name=eth0,bridge=vmbr0,ip=dhcp -net1 name=eth1,bridge={{ vmbr }},ip={{ kali_ip }}"
 
