@@ -1,0 +1,17 @@
+---
+- name: Start infras
+  hosts: pve
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Get list of running LXC containers with VMIDs starting with 2XX or 3XX
+      shell: pct list | grep '^[23][0-9][0-9]' | awk '$2 == "stopped" {print $1}'
+      register: running_lxc
+
+    - name: Stopped LXC VMIDs
+      debug:
+        msg: "{{ running_lxc.stdout_lines }}"
+
+    - name: Start infras
+      shell: pct start {{ item }}
+      with_items: "{{ running_lxc.stdout_lines }}"

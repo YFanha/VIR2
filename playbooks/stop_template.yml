@@ -1,0 +1,16 @@
+---
+- name: Stopping the template
+  hosts: pve
+  gather_facts: false
+  become: true
+  pre_tasks:
+    - include_vars:
+        file: vars.yml
+  tasks:
+    - name: Stop container
+      community.general.proxmox:
+        vmid: "{{ kali_template_id }}"
+        api_user: "{{ pve_user }}"
+        api_password: "{{ pve_pass }}"
+        api_host: "{{ pve_host }}"
+        state: stopped

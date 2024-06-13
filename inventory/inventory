@@ -3,14 +3,18 @@ srv-ansible-01 ansible_host=192.168.15.110  ansible_port=22
 kali-template ansible_host=  ansible_port=22
 pentest-template ansible_host=  ansible_port=22
 201-pentest ansible_host=10.10.10.20  ansible_port=22
-302-kali ansible_host=10.10.10.10
-192.168.15.141  ansible_port=22
-192.168.15.141  ansible_port=22
-203-pentest ansible_host=10.10.10.20  ansible_port=22
-301-kali ansible_host=10.10.10.10
-192.168.15.140  ansible_port=22
-192.168.15.140  ansible_port=22
 202-pentest ansible_host=10.10.10.20  ansible_port=22
-303-kali ansible_host=10.10.10.10
-192.168.15.142  ansible_port=22
-192.168.15.142  ansible_port=22
+301-kali ansible_host=10.10.10.10
+192.168.15.143  ansible_port=22
+192.168.15.143  ansible_port=22
+192.168.15.143  ansible_port=22
+192.168.15.143  ansible_port=22
+192.168.15.143  ansible_port=22
+192.168.15.143  ansible_port=22
+302-kali ansible_host=10.10.10.10
+192.168.15.144  ansible_port=22
+192.168.15.144  ansible_port=22
+192.168.15.144  ansible_port=22
+192.168.15.144  ansible_port=22
+192.168.15.144  ansible_port=22
+192.168.15.144  ansible_port=22

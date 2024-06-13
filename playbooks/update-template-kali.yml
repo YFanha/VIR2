@@ -1,0 +1,22 @@
+## Update/Configure the kali template
+- name: Update kali-template
+  hosts: kali-template
+  gather_facts: false
+  become: true
+  pre_tasks:
+    - include_vars:
+        file: vars.yml
+  tasks:
+    - name: Install new softwares
+      apt:
+        name: "{{ item }}"
+        update_cache: true
+        cache_valid_time: 3600
+        state: present
+      loop: "{{ packages_kali }}"
+
+    - name: Enable ssh root login
+      ansible.builtin.lineinfile:
+        dest: /etc/ssh/sshd_config
+        regexp: '^PermitRootLogin'
+        line: "PermitRootLogin yes"

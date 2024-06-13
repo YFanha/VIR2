@@ -11,11 +11,14 @@ def clear_screen():
 
 
 def display_menu():
-    print("\n")
-    print("1. Deploy new infras")
-    print("2. Stop & delete all running infras")
-    print("3. Update kali")
-    print("4. Quitter")
+    print("\n=================================")
+    print("1. DEPLOY")
+    print("2. STOP & DELETE all running infras")
+    print("3. STOP running containers")
+    print("4. START stopped containers")
+    print("5. DELETE all stopped infras")
+    print("6. UPDATE kali")
+    print("7. Quit")
 
 
 def kali_generate_vmid(student_nbr):
@@ -33,7 +36,7 @@ def pentest_generate_vmid(student_nbr):
 
 def update_vars(student, kali_vmid, pentest_vmid):
     # Load vars.yml
-    with open('deploy_infra/vars.yml', 'r') as file:
+    with open('playbooks/vars.yml', 'r') as file:
         vars_data = yaml.safe_load(file)
 
     vars_data['student'] = student
@@ -41,27 +44,27 @@ def update_vars(student, kali_vmid, pentest_vmid):
     vars_data['pentest_student_vmid'] = pentest_vmid
 
     # Save modified data back to vars.yml
-    with open('deploy_infra/vars.yml', 'w') as file:
+    with open('playbooks/vars.yml', 'w') as file:
         yaml.dump(vars_data, file)
 
 
 def create_network():
     subprocess.run(
-    ["/usr/bin/env", "ansible-playbook", "-i", "inventory/inventory", "deploy_infra/create_network.yml"],
+    ["/usr/bin/env", "ansible-playbook", "-i", "inventory/inventory", "playbooks/create_network.yml"],
     stdout=subprocess.DEVNULL,
     stderr=subprocess.DEVNULL)
 
 
 def deploy_pentester():
     subprocess.run(
-    ["/usr/bin/env", "ansible-playbook", "-i", "inventory/inventory", "deploy_infra/deploy_pentest.yml"],
+    ["/usr/bin/env", "ansible-playbook", "-i", "inventory/inventory", "playbooks/deploy_pentest.yml"],
     stdout=subprocess.DEVNULL,
     stderr=subprocess.DEVNULL)
 
 
 def deploy_attacker():
     subprocess.run(
-    ["/usr/bin/env", "ansible-playbook", "-i", "inventory/inventory", "deploy_infra/deploy_attacker.yml"],
+    ["/usr/bin/env", "ansible-playbook", "-i", "inventory/inventory", "playbooks/deploy_attacker.yml"],
     stdout=subprocess.DEVNULL,
     stderr=subprocess.DEVNULL)
 
@@ -86,28 +89,86 @@ def deploy_infras():
         print("deployed : " + f"{student}")
 
 
-def stop_all():
+def start_infras():
+    print("Starting all student's infrastructure")
+    subprocess.run(["/usr/bin/env", "ansible-playbook", "-i", "inventory/inventory", "playbooks/start_infras.yml"],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL)
+    print("Infrastructures has been stopped.")
+
+
+def stop_running_infras():
     while True:
         clear_screen()
-        confirm = input("Are you sure you want to stop and delete all student's infrastructure? (yes/no): ").lower()
-        if confirm == 'yes':
-            print("Stopping and deleting all student's infrastructure")
-            subprocess.run(["/usr/bin/env", "ansible-playbook", "-i", "inventory/inventory", "stop_infra/stop_infras.yml"],
+        confirm = input("Are you sure you want to stop all student's infrastructure? (y/n): ").lower()
+        if confirm == 'y':
+            print("Stopping all student's infrastructure")
+            subprocess.run(["/usr/bin/env", "ansible-playbook", "-i", "inventory/inventory", "playbooks/stop_infras.yml"],
                            stdout=subprocess.DEVNULL,
                            stderr=subprocess.DEVNULL)
-            print("Infrastructure has been stopped and deleted.")
+            print("Infrastructures has been stopped.")
             break  # Exit the loop if user confirms
-        elif confirm == 'no':
+        elif confirm == 'n':
             print("Operation cancelled.")
             break  # Exit the loop if user cancels
         else:
-            print("Invalid input. Please enter 'yes' or 'no'.")
+            print("Invalid input. Please enter 'y' or 'n'.")
+
+
+def delete_all_infras():
+    while True:
+        clear_screen()
+        confirm = input("Are you sure you want to delete all student's infrastructure? (y/n): ").lower()
+        if confirm == 'y':
+            print("Deleting all stopped student's infrastructure")
+            subprocess.run(["/usr/bin/env", "ansible-playbook", "-i", "inventory/inventory", "playbooks/delete_infras.yml"],
+                           stdout=subprocess.DEVNULL,
+                           stderr=subprocess.DEVNULL)
+            print("Infrastructures has been deleted.")
+            break  # Exit the loop if user confirms
+        elif confirm == 'n':
+            print("Operation cancelled.")
+            break  # Exit the loop if user cancels
+        else:
+            print("Invalid input. Please enter 'y' or 'n'.")
+
+def stop_and_delete_infras():
+    while True:
+        clear_screen()
+        confirm = input("Are you sure you want to stop & delete all student's infrastructure? (y/n): ").lower()
+        if confirm == 'y':
+            print("Stopping and deleting all student's infrastructure")
+            subprocess.run(["/usr/bin/env", "ansible-playbook", "-i", "inventory/inventory", "playbooks/stop_and_delete_run_infras.yml"],
+                           stdout=subprocess.DEVNULL,
+                           stderr=subprocess.DEVNULL)
+            print("Infrastructures has been stopped and deleted.")
+            break  # Exit the loop if user confirms
+        elif confirm == 'n':
+            print("Operation cancelled.")
+            break  # Exit the loop if user cancels
+        else:
+            print("Invalid input. Please enter 'y' or 'n'.")
+
 
 def update_kali():
     subprocess.run(
-    ["/usr/bin/env", "ansible-playbook", "-i", "inventory/inventory", "deploy_infra/update-template-kali.yml"],
+    ["/usr/bin/env", "ansible-playbook", "-i", "inventory/inventory", "playbooks/start_template.yml"],
     stdout=subprocess.DEVNULL,
     stderr=subprocess.DEVNULL)
+
+    # Update the inventory to get the IP
+    update_inventory()
+
+    subprocess.run(
+    ["/usr/bin/env", "ansible-playbook", "-i", "inventory/inventory", "playbooks/update-template-kali.yml"],
+    stdout=subprocess.DEVNULL,
+    stderr=subprocess.DEVNULL)
+    subprocess.run(
+    ["/usr/bin/env", "ansible-playbook", "-i", "inventory/inventory", "playbooks/stop_template.yml"],
+    stdout=subprocess.DEVNULL,
+    stderr=subprocess.DEVNULL)
+    
+    print("The template has been updated with the packages of the vars.yml file.")
 
 
     
@@ -117,25 +178,31 @@ def update_inventory():
 
 
 def main():
+    update_inventory()
     while True:
-        update_inventory()
         clear_screen()
         display_menu()
-        choice = input("What do you want to do ? (1-4) : ")
+        choice = input("What do you want to do ? (1-6) : ")
 
         if choice == '1':
             deploy_infras()
         elif choice == '2':
-            stop_all()
+            stop_and_delete_infras()
         elif choice == '3':
-            update_kali()
+            stop_running_infras()
         elif choice == '4':
+            start_infras()
+        elif choice == '5':
+            delete_all_infras()
+        elif choice == '6':
+            update_kali()
+        elif choice == '7':
             print("Quit.")
             break
         else:
             print("Invalid choice.")
 
-        input("\nPress any key to continue...")
+        input("Press enter to continue...")
 
 
 if __name__ == "__main__":

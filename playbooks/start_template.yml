@@ -1,0 +1,14 @@
+---
+- name: Starting the template
+  hosts: pve
+  pre_tasks:
+    - include_vars:
+        file: vars.yml
+  tasks:
+    - name: Start container 
+      community.general.proxmox:
+        vmid: "{{ kali_template_id }}"
+        api_user: "{{ pve_user }}"
+        api_password: "{{ pve_pass }}"
+        api_host: "{{ pve_host }}"
+        state: started
