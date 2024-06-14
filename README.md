@@ -33,6 +33,9 @@ Yann.FANHA@eduvaud.ch**
 | stop_template.yml | Arrêter le template Kali |
 | update-template-kali.yml | Vérifier et Installer que tous les softwares spécifiés dans la liste “packages_kali” sont présent dans le template. Si un package est ajoué, il sera installé sur la machine grâce  à ce playbook. |
 
+
+Malheureusement, je n'ai pas réussi à faire fonctionner entièrement le script d'installation du pentester (configure-pentest.yml). Tout fonctionne, excepté la partie d'import de la base de données.
+Pour la configuration de kali, le script est "Update-tempalte-kali.yml" -> il installe simplement les packages renseigné dans le fichiers "vars.yml".
 ## Files
 
 | playbooks/templates/ipconfig.j2 | Template pour le fichier qui répertorie la configuration d’un labo (user, password, IP, hostname..) |
