@@ -5,6 +5,11 @@ pentest-template ansible_host=  ansible_port=22
 201-pentest ansible_host=10.10.10.20  ansible_port=22
 202-pentest ansible_host=10.10.10.20  ansible_port=22
 301-kali ansible_host=10.10.10.10
+192.168.15.154  ansible_port=22
+192.168.15.153  ansible_port=22
+192.168.15.153  ansible_port=22
+192.168.15.152  ansible_port=22
+192.168.15.152  ansible_port=22
 192.168.15.143  ansible_port=22
 192.168.15.143  ansible_port=22
 192.168.15.143  ansible_port=22

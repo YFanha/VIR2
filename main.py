@@ -182,7 +182,7 @@ def main():
     while True:
         clear_screen()
         display_menu()
-        choice = input("What do you want to do ? (1-6) : ")
+        choice = input("What do you want to do ? (1-7) : ")
 
         if choice == '1':
             deploy_infras()
