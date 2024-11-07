@@ -63,7 +63,7 @@ The proxmox.yml file is available on [﻿the github repository.](https://github.
 
 
 
-![Figure 1](/.eraser/OWdL5M6z0pbWMYSQTTu4___uz7sTbrDV2bvpLzex5kzFZIrBMH2___---figure---J4ZjI1rzvXd2BBUps2YNw---figure---YvTBTGkN5wxLD_szByHeVQ.png "Figure 1")
+![Figure 1](/.eraser/OWdL5M6z0pbWMYSQTTu4___uz7sTbrDV2bvpLzex5kzFZIrBMH2___---figure---x6i6uErPWngvnK0782V5D---figure---YvTBTGkN5wxLD_szByHeVQ.png "Figure 1")
 
  
 
@@ -71,7 +71,7 @@ The proxmox.yml file is available on [﻿the github repository.](https://github.
 <!-- eraser-additional-content -->
 ## Diagrams
 <!-- eraser-additional-files -->
-<a href="/README-test readme-1.eraserdiagram" data-element-id="p8fqXPnaMOc_q6EKQg8nu"><img src="/.eraser/OWdL5M6z0pbWMYSQTTu4___uz7sTbrDV2bvpLzex5kzFZIrBMH2___---diagram----79f08beb3a85e5ccfb1105a0e90df27b-test-readme.png" alt="" data-element-id="p8fqXPnaMOc_q6EKQg8nu" /></a>
+<a href="/README-cloud-architecture-1.eraserdiagram" data-element-id="p8fqXPnaMOc_q6EKQg8nu"><img src="/.eraser/OWdL5M6z0pbWMYSQTTu4___uz7sTbrDV2bvpLzex5kzFZIrBMH2___---diagram----f156fe8af359277e15d6b668f24b0d19.png" alt="" data-element-id="p8fqXPnaMOc_q6EKQg8nu" /></a>
 <!-- end-eraser-additional-files -->
 <!-- end-eraser-additional-content -->
 <!--- Eraser file: https://app.eraser.io/workspace/OWdL5M6z0pbWMYSQTTu4 --->
