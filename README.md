@@ -63,7 +63,7 @@ The proxmox.yml file is available on [﻿the github repository.](https://github.
 
 
 
-![Figure 1](/.eraser/OWdL5M6z0pbWMYSQTTu4___uz7sTbrDV2bvpLzex5kzFZIrBMH2___---figure---x6i6uErPWngvnK0782V5D---figure---YvTBTGkN5wxLD_szByHeVQ.png "Figure 1")
+
 
  
 
